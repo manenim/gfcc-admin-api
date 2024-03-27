@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Eight } from 'src/eights/entities/eight.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class MemberProfile {
@@ -16,4 +17,7 @@ export class MemberProfile {
 
   @Column()
   state: string;
+
+  @ManyToOne(() => Eight, (eight) => eight.memberProfiles)
+  eight: Eight;
 }

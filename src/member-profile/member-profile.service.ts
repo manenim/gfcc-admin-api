@@ -1,18 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MemberProfile } from 'src/member-profile/entities/member-profile.entity';
+import { Repository } from 'typeorm';
+import { EightsService } from './../eights/eights.service';
 import { CreateMemberProfileDto } from './dto/create-member-profile.dto';
 import { UpdateMemberProfileDto } from './dto/update-member-profile.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MemberProfile } from './entities/member-profile.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class MemberProfileService {
   constructor(
     @InjectRepository(MemberProfile)
-    private readonly memberProfileRepository: Repository<MemberProfile>
-  ){}
-  create(createMemberProfileDto: CreateMemberProfileDto) {
-    return this.memberProfileRepository.save(createMemberProfileDto);
+    private readonly memberProfileRepository: Repository<MemberProfile>,
+    private readonly eightsService: EightsService,
+  ) {}
+  async create(createMemberProfileDto: CreateMemberProfileDto) {
+    const { eightId, ...others } = createMemberProfileDto;
+    const eight = await this.eightsService.findOne(eightId);
+    const maxGroupCapacity = 8
+    if (eight?.memberProfiles?.length >= maxGroupCapacity)
+      throw new BadRequestException(
+        'Cannot add this profile because this Eight group is full',
+      );
+    const memberProfile = { ...others, eight };
+    return this.memberProfileRepository.save(memberProfile);
   }
 
   findAll() {

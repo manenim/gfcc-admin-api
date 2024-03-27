@@ -7,7 +7,7 @@ import { UpdateMemberProfileDto } from './dto/update-member-profile.dto';
 export class MemberProfileController {
   constructor(private readonly memberProfileService: MemberProfileService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createMemberProfileDto: CreateMemberProfileDto) {
     return this.memberProfileService.create(createMemberProfileDto);
   }

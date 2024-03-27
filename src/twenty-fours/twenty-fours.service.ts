@@ -13,13 +13,13 @@ export class TwentyFoursService {
     private readonly twentyFourRepository: Repository<TwentyFour>,
     private readonly leagesService: LeaguesService,
   ) {}
-  async create(leagueId: string,  createTwentyFourDto: CreateTwentyFourDto) {
-   
+
+  async create(leagueId: string, createTwentyFourDto: CreateTwentyFourDto) {
     const league = await this.leagesService.findOne(leagueId);
     let twentyFour = new TwentyFour();
     twentyFour.league = league;
 
-    twentyFour = {...twentyFour, ...createTwentyFourDto  };
+    twentyFour = { ...twentyFour, ...createTwentyFourDto };
     return await this.twentyFourRepository.save(twentyFour);
   }
 
@@ -27,14 +27,18 @@ export class TwentyFoursService {
     return await this.twentyFourRepository.find({
       relations: {
         league: true,
-        eights: true
-    }});
+        eights: true,
+      },
+    });
   }
 
   async findOne(id: string) {
     return await this.twentyFourRepository.findOne({
       where: {
-        id
+        id,
+      },
+      relations: {
+        eights: true
       }
     });
   }

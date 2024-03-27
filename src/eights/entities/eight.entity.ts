@@ -1,5 +1,6 @@
+import { MemberProfile } from 'src/member-profile/entities/member-profile.entity';
 import { TwentyFour } from 'src/twenty-fours/entities/twenty-four.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Eight {
@@ -11,4 +12,7 @@ export class Eight {
 
   @ManyToOne(() => TwentyFour, (twentyFour) => twentyFour.eights)
   twentyFour: TwentyFour;
+
+  @OneToMany(() => MemberProfile, (mem) => mem.eight)
+  memberProfiles: MemberProfile[];
 }

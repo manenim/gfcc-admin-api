@@ -12,4 +12,7 @@ export class CreateMemberProfileDto {
 
   @IsString()
   state: string;
+
+  @IsString()
+  eightId: string;
 }
